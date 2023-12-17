@@ -32,6 +32,7 @@ router.post('/signup', async (req, res) => {
 
 // LOGIN USER
 
+const tokensInUse = [];
 router.post('/login', async (req, res) => {
   try {
     const { email, } = req.body;
@@ -55,7 +56,8 @@ router.post('/login', async (req, res) => {
        process.env.JWT_SEC, 
        { expiresIn: '3d' });
 
-const {password , ...other}=user._doc
+       tokensInUse.push(token);
+       const {password , ...other}=user._doc
     res.status(200).json({...other,token});
   } catch (err) {
     console.error(err);
@@ -67,27 +69,48 @@ const {password , ...other}=user._doc
 
 
 // LOGOUT USER
-router.post('/logout', async (req, res) => {
+// router.get('/logout', async (req, res) => {
+//   try {
+//     const token = req.header('Authorization').replace('Bearer ', '');
+
+//     // Find the user based on the token
+//     const user = await User.findOne({ 'token': token });
+
+//     if (!user) {
+//       return res.status(401).send({ error: 'User not found' });
+//     }
+
+//     // Remove the token from the user's tokens array
+//     user.tokens = user.tokens.filter((storedToken) => storedToken !== token);
+//     await user.save();
+
+//     res.status(200).send({ message: 'Logout successful' });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+router.get('/logout', async (req, res) => {
+
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
+    const token = req.header('Authorization')?.replace('Bearer ','');
 
-    // Find the user based on the token
-    const user = await User.findOne({ 'token': token });
-
-    if (!user) {
-      return res.status(401).send({ error: 'User not found' });
+console.log("token========",token)
+    const tokenIndex = tokensInUse.indexOf(token);
+    if (tokenIndex !== -1) {
+      tokensInUse.splice(tokenIndex, 1);
+    } else {
+      return res.status(401).send({ error: 'Token not found' });
     }
 
-    // Remove the token from the user's tokens array
-    user.tokens = user.tokens.filter((storedToken) => storedToken !== token);
-    await user.save();
-
-    res.status(200).send({ message: 'Logout successful' });
+   return res.status(200).send({ message: 'Logout successful' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
+ return   res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 
 
