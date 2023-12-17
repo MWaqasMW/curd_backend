@@ -1,29 +1,28 @@
 import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema({
+const attendenceSchema = new mongoose.Schema({
+
   name: {
     type: String,
     required: true,
   },
-  email: {
+  id: {
     type: String,
     required: true,
     unique: true,
   },
-  password: {
+  location: {
     type: String,
     required: true,
+    unique: true,
   },
-  image :{
+  image: {
     type: String,
-  },
-  isAdmin: {
-    default: true,
-    type: Boolean,
+    required: true,
   },
   timestamp: { type: Date, default: Date.now },
 });
 
-const User = mongoose.model('User', userSchema);
+const Attendence = mongoose.model('Attendence', attendenceSchema);
 
-export default User;
+export default Attendence;

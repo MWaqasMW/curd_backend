@@ -8,27 +8,27 @@ const router = express.Router();
 
 // REGISTER USER
 
-router.post('/signup', async (req, res) => {
-  try {
-    const { error } = registerValidation.validate(req.body);
+// router.post('/signup', async (req, res) => {
+//   try {
+//     const { error } = registerValidation.validate(req.body);
 
-    if (error) {
-      return res.status(400).send({ error: error.details[0].message });
-    }
+//     if (error) {
+//       return res.status(400).send({ error: error.details[0].message });
+//     }
 
-    const { password } = req.body;
-    console.log("req.body===========",req.body)
-    const hashPass = CryptoJS.AES.encrypt(password, process.env.PASS_KEY).toString();
+//     const { password } = req.body;
+//     console.log("req.body===========",req.body)
+//     const hashPass = CryptoJS.AES.encrypt(password, process.env.PASS_KEY).toString();
 
-    const newUser = new User({ ...req.body, password: hashPass });
-    await newUser.save();
+//     const newUser = new User({ ...req.body, password: hashPass });
+//     await newUser.save();
 
-    res.status(200).send({ message: "Registration successful" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: "Internal Server Error",msg:err.message  });
-  }
-});
+//     res.status(200).send({ message: "Registration successful" });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send({ error: "Internal Server Error",msg:err.message  });
+//   }
+// });
 
 // LOGIN USER
 
@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
 
     const decryptedPasswordBytes = CryptoJS.AES.decrypt(user.password, process.env.PASS_KEY);
     const decryptedPassword = decryptedPasswordBytes.toString(CryptoJS.enc.Utf8);
-
+console.log("decryptedPassword============",decryptedPassword)
     if (decryptedPassword !== req.body.password) {
       return res.status(400).json({ error: "Invalid password" });
 

@@ -13,10 +13,9 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   }
   try {
     const cloudinaryUrl = await uploadToCloudinary(uploadedFile.path);
-console.log("uploadedFile======",cloudinaryUrl)
-    // if (uploadedFile) {
-    //   fs.unlinkSync(uploadedFile.path);
-    // }
+    if (uploadedFile) {
+      fs.unlinkSync(uploadedFile.path);
+    }
     return res.send({ message: 'File uploaded successfully', url: cloudinaryUrl });
   } catch (error) {
 console.log(error)
