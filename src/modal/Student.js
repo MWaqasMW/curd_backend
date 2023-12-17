@@ -1,19 +1,14 @@
 import mongoose from 'mongoose';
 
 const studentSchema = new mongoose.Schema({
+
     name: {
         type: String,
         required: true,
       },
-      id: {
-        type: String,
-        required: true,
-        unique: true,
-      },
       course:{
         type: String,
         required: true,
-        unique: true,
       },
       email: {
         type: String,
@@ -26,6 +21,9 @@ const studentSchema = new mongoose.Schema({
       },
       image :{
         type: String,
+      },
+      phone:{
+      type:Number,
       },
       isAdmin: {
         default: false,
