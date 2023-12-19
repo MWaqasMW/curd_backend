@@ -18,8 +18,12 @@ export const StudentRegisterValidation =  joi.object({
     email: joi.string().email().required(),
     password: joi.string().min(8).required(),
     course: joi.string().required(),
-    // image : joi.string(),
 
-   
-        
+})
+
+
+export const attendenceValidation = joi.object({
+    name: joi.string().min(3).required(),
+    course: joi.string().required(),
+    isPresent : joi.boolean().required()
 })

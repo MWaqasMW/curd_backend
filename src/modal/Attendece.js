@@ -6,20 +6,15 @@ const attendenceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  id: {
-    type: String,
-    required: true,
-    unique: true,
+course:{
+type : String,
+required :true
+},
+  isPresent:{
+    type:Boolean,
+    required : true,
   },
-  location: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  image: {
-    type: String,
-    required: true,
-  },
+
   timestamp: { type: Date, default: Date.now },
 });
 

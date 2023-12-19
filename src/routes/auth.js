@@ -46,14 +46,13 @@ router.post('/login', async (req, res) => {
 
     const decryptedPasswordBytes = CryptoJS.AES.decrypt(user.password, process.env.PASS_KEY);
     const decryptedPassword = decryptedPasswordBytes.toString(CryptoJS.enc.Utf8);
-console.log("decryptedPassword============",decryptedPassword)
     if (decryptedPassword !== req.body.password) {
       return res.status(400).json({ error: "Invalid password" });
 
     }
 
     const token = jwt.sign(
-      {id:user._id},
+      {id:user._id,isAdmin:user.isAdmin},
        process.env.JWT_SEC, 
        { expiresIn: '3d' });
 
@@ -118,45 +117,6 @@ console.log("token========",token)
 
 //Create Student 
 
-router.post('/createstudent', async (req, res) => {
-console.log("req.body ",req.body)
-
-  try {
-    const { error } = StudentRegisterValidation.validate(req.body);
-
-    if (error) {
-      return res.status(400).send({ error: error.details[0].message });
-    }
-
-    const { password } = req.body;
-    const hashPass = CryptoJS.AES.encrypt(password, process.env.PASS_KEY).toString();
-
-    const newStudent = new Student({ ...req.body, password: hashPass });
-    await newStudent.save();
-
-    res.status(200).send({ message: "Student Registration successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: "Internal Server Error",msg:err.message  });
-  }
-});
-
-
-
-
-//Get All Student
-
-// Get All Students
-router.get('/allstudents', async (req, res) => {
-  try {
-    const allStudents = await Student.find();
-
-    res.status(200).send({ students: allStudents });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: "Internal Server Error", msg: err.message });
-  }
-});
 
 
 
